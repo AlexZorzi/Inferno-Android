@@ -23,6 +23,15 @@
  */
 
 #include "qemu/osdep.h"
+
+#ifdef __ANDROID__
+#ifndef CONFIG_LINUX
+#define CONFIG_LINUX 1
+#endif
+#include <unistd.h>
+#include <sys/types.h>
+ssize_t copy_file_range(int fd_in, off_t *off_in, int fd_out, off_t *off_out, size_t len, unsigned int flags);
+#endif
 #include "qapi/error.h"
 #include "qemu/cutils.h"
 #include "qemu/error-report.h"

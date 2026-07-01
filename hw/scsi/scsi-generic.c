@@ -27,6 +27,12 @@
 #ifdef __linux__
 
 #include <scsi/sg.h>
+#ifndef SG_ERR_DRIVER_TIMEOUT
+#define SG_ERR_DRIVER_TIMEOUT 0x06
+#endif
+#ifndef SG_ERR_DRIVER_SENSE
+#define SG_ERR_DRIVER_SENSE 0x08
+#endif
 #include "scsi/constants.h"
 
 #ifndef MAX_UINT

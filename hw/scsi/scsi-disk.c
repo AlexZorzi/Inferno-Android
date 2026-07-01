@@ -46,6 +46,9 @@
 
 #ifdef __linux
 #include <scsi/sg.h>
+#ifndef SG_ERR_DRIVER_TIMEOUT
+#define SG_ERR_DRIVER_TIMEOUT 0x06
+#endif
 #endif
 
 #define SCSI_WRITE_SAME_MAX         (512 * KiB)

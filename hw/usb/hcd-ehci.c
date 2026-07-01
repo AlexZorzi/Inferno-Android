@@ -2594,6 +2594,11 @@ void usb_ehci_init(EHCIState *s, DeviceState *dev)
                           "operational", s->portscbase);
     memory_region_init_io(&s->mem_ports, OBJECT(dev), &ehci_mmio_port_ops, s,
                           "ports", 4 * s->portnr);
+
+    s->mem.disable_reentrancy_guard = true;
+    s->mem_caps.disable_reentrancy_guard = true;
+    s->mem_opreg.disable_reentrancy_guard = true;
+    s->mem_ports.disable_reentrancy_guard = true;
 }
 
 void usb_ehci_finalize(EHCIState *s)

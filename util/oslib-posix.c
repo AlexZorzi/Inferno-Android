@@ -48,6 +48,25 @@
 #include <sys/syscall.h>
 #endif
 
+#ifdef __ANDROID__
+#include <sys/syscall.h>
+#include <sys/mman.h>
+#include <signal.h>
+#include <unistd.h>
+
+#ifndef SYS_gettid
+#define SYS_gettid __NR_gettid
+#endif
+
+#ifndef SYS_close_range
+#define SYS_close_range __NR_close_range
+#endif
+
+static inline int close_range(unsigned int first, unsigned int last, unsigned int flags) {
+    return syscall(SYS_close_range, first, last, flags);
+}
+#endif
+
 #ifdef __FreeBSD__
 #include <sys/thr.h>
 #include <sys/user.h>
@@ -96,7 +115,9 @@ static QemuCond page_cond;
 
 int qemu_get_thread_id(void)
 {
-#if defined(__linux__)
+#if defined(__ANDROID__)
+    return gettid();
+#elif defined(__linux__)
     return syscall(SYS_gettid);
 #elif defined(__FreeBSD__)
     /* thread id is up to INT_MAX */
@@ -114,7 +135,9 @@ int qemu_get_thread_id(void)
 
 int qemu_kill_thread(int tid, int sig)
 {
-#if defined(__linux__)
+#if defined(__ANDROID__)
+    return tgkill(getpid(), tid, sig);
+#elif defined(__linux__)
     return syscall(__NR_tgkill, getpid(), tid, sig);
 #elif defined(__FreeBSD__)
     return thr_kill2(getpid(), tid, sig);

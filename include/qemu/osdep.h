@@ -32,6 +32,15 @@
 #endif
 
 #include "config-host.h"
+
+#ifdef __linux__
+#ifndef CONFIG_LINUX
+#define CONFIG_LINUX 1
+#endif
+#endif
+
+
+
 #ifdef COMPILING_PER_TARGET
 #include CONFIG_TARGET
 #else
@@ -870,6 +879,46 @@ static inline int platform_does_not_support_system(const char *command)
     return -1;
 }
 #endif /* !HAVE_SYSTEM_FUNCTION */
+
+#ifdef __ANDROID__
+/* Android's sys/stat.h defines macros that conflict with QEMU's V9fsStatDotl fields */
+#undef st_atime_nsec
+#undef st_mtime_nsec
+#undef st_ctime_nsec
+
+/* Define sync_file_range for Android/Bionic (missing in headers but present in libc) */
+#ifndef SYNC_FILE_RANGE_WAIT_BEFORE
+#define SYNC_FILE_RANGE_WAIT_BEFORE 1
+#endif
+#ifndef SYNC_FILE_RANGE_WRITE
+#define SYNC_FILE_RANGE_WRITE 2
+#endif
+#ifndef SYNC_FILE_RANGE_WAIT_AFTER
+#define SYNC_FILE_RANGE_WAIT_AFTER 4
+#endif
+int sync_file_range(int fd, off64_t offset, off64_t nbytes, unsigned int flags);
+
+/* Android-specific shm_open / shm_unlink compatibility using memfd_create */
+#include <sys/mman.h>
+#include <sys/syscall.h>
+#ifndef MFD_CLOEXEC
+#define MFD_CLOEXEC 0x0001U
+#endif
+#ifndef MFD_ALLOW_SEALING
+#define MFD_ALLOW_SEALING 0x0002U
+#endif
+static inline int shm_open(const char *name, int oflag, mode_t mode) {
+#ifdef __NR_memfd_create
+    return syscall(__NR_memfd_create, name, MFD_CLOEXEC | MFD_ALLOW_SEALING);
+#else
+    errno = ENOSYS;
+    return -1;
+#endif
+}
+static inline int shm_unlink(const char *name) {
+    return 0;
+}
+#endif
 
 #ifdef __cplusplus
 }

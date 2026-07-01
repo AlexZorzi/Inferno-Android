@@ -17,6 +17,9 @@ ss = import('sourceset')
 fs = import('fs')
 
 host_os = host_machine.system()
+if host_os == 'android'
+  host_os = 'linux'
+endif
 config_host = keyval.load(meson.current_build_dir() / 'config-host.mak')
 
 # Temporary directory used for files created while
