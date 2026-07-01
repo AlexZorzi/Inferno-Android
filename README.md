@@ -3,6 +3,8 @@ Huge thanks to Chefkiss Inferno devs.
 This fork enables Inferno to run on Android, tested on Samsung S26 Ultra (12GB RAM) Android 17 OneUI 9 (Snapdragon 8 Elite Gen 5)
 
 ## Showcase
+https://github.com/user-attachments/assets/caefff4c-908f-4999-8816-f79ea0e78076
+
 [Watch the demo](./docs/android.mp4)
 
 ## Why?
