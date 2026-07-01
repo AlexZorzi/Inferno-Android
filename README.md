@@ -1,3 +1,20 @@
+# Android
+Huge thanks to Chefkiss Inferno devs.
+This fork enables Inferno to run on Android, tested on Samsung S26 Ultra (12GB RAM) Android 17 OneUI 9 (Snapdragon 8 Elite Gen 5)
+
+## Showcase
+[Watch the demo](./docs/android.mp4)
+
+## Why?
+Why not?
+
+## Is this stable?
+No lol its hacked together to work on Android and Performance is very slow due to current mobile performance limitations, the showcase clip has been cut to make some loading screens faster.
+
+## What has been fixed on Android?
+It compiles and the guest VM is able to flash the iOS VM.
+You still need a MacOS machine for the patching part of the guide.
+
 # ChefKiss Inferno ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ChefKissInc/Inferno/build.yaml?style=for-the-badge) ![Written by humans, not AI](https://img.shields.io/badge/written_by_humans-not_ai-blue?style=for-the-badge)
 
 ChefKiss Inferno is derivative of the QEMU project which provides Apple ARM device guest support.
